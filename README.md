@@ -43,7 +43,7 @@ An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **Reac
 - **SQLite** - Embedded database storage
 - **PyJWT & bcrypt** - Authentication & security
 - **LangChain & ChatOpenAI** - LLM prompt orchestration
-- **OpenRouter API** - LLM access (`openrouter/auto`)
+- **OpenRouter API** - LLM access (`qwen/qwen3-coder:free`)
 
 ### Frontend
 - **React 18** (Vite build tool)
@@ -146,7 +146,7 @@ Yellow IAI/
    ALGORITHM=HS256
    ACCESS_TOKEN_EXPIRE_MINUTES=30
    OPENROUTER_API_KEY=your_actual_openrouter_api_key_here
-   LLM_MODEL=qwen/qwen3-235b-a22b:free
+   LLM_MODEL=qwen/qwen3-coder:free
    ```
 
 6. Start the FastAPI development server:
