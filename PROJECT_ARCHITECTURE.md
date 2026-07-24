@@ -6,23 +6,23 @@ The platform uses a modern **3-Tier Client-Server Architecture** designed for hi
 
 ```mermaid
 graph TD
-    subgraph Tier 1: Client Layer (Frontend)
-        UI[React 18 SPA] --> Router[React Router DOM]
-        UI --> Axios[Axios HTTP Client]
+    subgraph "Tier 1: Client Layer (Frontend)"
+        UI["React 18 SPA"] --> Router["React Router DOM"]
+        UI --> Axios["Axios HTTP Client"]
     end
 
-    subgraph Tier 2: Application Layer (Backend API)
-        Axios -->|JSON / REST| FastAPI[FastAPI App Server]
-        FastAPI --> AuthMiddleware[JWT Auth Middleware]
-        FastAPI --> Services[Service Layer: Auth / Projects / Chat]
-        Services --> Sanitizer[Response Sanitizer Engine]
+    subgraph "Tier 2: Application Layer (Backend API)"
+        Axios -->|JSON / REST| FastAPI["FastAPI App Server"]
+        FastAPI --> AuthMiddleware["JWT Auth Middleware"]
+        FastAPI --> Services["Service Layer: Auth / Projects / Chat"]
+        Services --> Sanitizer["Response Sanitizer Engine"]
     end
 
-    subgraph Tier 3: Data & External AI Layer
-        Services --> ORM[SQLAlchemy ORM]
-        ORM <--> DB[(SQLite Database)]
-        Services --> LangChain[LangChain AI Pipeline]
-        LangChain <-->|HTTPS API Key| OpenRouter[OpenRouter LLM API]
+    subgraph "Tier 3: Data & External AI Layer"
+        Services --> ORM["SQLAlchemy ORM"]
+        ORM <--> DB[("SQLite Database")]
+        Services --> LangChain["LangChain AI Pipeline"]
+        LangChain <-->|HTTPS API Key| OpenRouter["OpenRouter LLM API"]
     end
 ```
 
