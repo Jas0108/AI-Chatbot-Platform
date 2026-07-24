@@ -1,8 +1,8 @@
+import os
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,12 +14,30 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+def _truncate_password(password: str) -> str:
+    """Safely truncate password to 72 bytes for bcrypt compatibility."""
+    if not password:
+        return ""
+    pwd_bytes = password.encode("utf-8")[:72]
+    return pwd_bytes.decode("utf-8", errors="ignore")
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    if not plain_password or not hashed_password:
+        return False
+    safe_password = _truncate_password(plain_password)
+    try:
+        return pwd_context.verify(safe_password, hashed_password)
+    except Exception:
+        try:
+            return pwd_context.verify(plain_password[:72], hashed_password)
+        except Exception:
+            return False
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    safe_password = _truncate_password(password)
+    return pwd_context.hash(safe_password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
