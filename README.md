@@ -4,7 +4,7 @@ An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **Reac
 
 ---
 
-##Deployment
+## Deployment
 
 - **Live Web Application**: [https://ai-chatbot-platform-sigma.vercel.app/](https://ai-chatbot-platform-sigma.vercel.app/)
 - **Live Backend API**: [https://ai-chatbot-platform-z04j.onrender.com](https://ai-chatbot-platform-z04j.onrender.com)
@@ -41,7 +41,7 @@ An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **Reac
 - **FastAPI** (Python 3.8+) - High-performance asynchronous REST API framework
 - **SQLAlchemy** - Relational Database ORM
 - **SQLite** - Embedded database storage
-- **PyJWT & Passlib (bcrypt)** - Authentication & security
+- **PyJWT & bcrypt** - Authentication & security
 - **LangChain & ChatOpenAI** - LLM prompt orchestration
 - **OpenRouter API** - LLM access (`meta-llama/llama-3.3-70b-instruct:free`)
 
