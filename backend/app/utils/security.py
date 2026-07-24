@@ -1,4 +1,5 @@
 import os
+import bcrypt
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -14,30 +15,49 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def _truncate_password(password: str) -> str:
+def _get_pwd_bytes(password: str) -> bytes:
     """Safely truncate password to 72 bytes for bcrypt compatibility."""
     if not password:
-        return ""
-    pwd_bytes = password.encode("utf-8")[:72]
-    return pwd_bytes.decode("utf-8", errors="ignore")
+        return b""
+    return password.encode("utf-8")[:72]
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     if not plain_password or not hashed_password:
         return False
-    safe_password = _truncate_password(plain_password)
+    
+    pwd_bytes = _get_pwd_bytes(plain_password)
+    
+    # 1. Try direct bcrypt verification
     try:
-        return pwd_context.verify(safe_password, hashed_password)
+        hash_bytes = hashed_password.encode("utf-8")
+        if bcrypt.checkpw(pwd_bytes, hash_bytes):
+            return True
     except Exception:
-        try:
-            return pwd_context.verify(plain_password[:72], hashed_password)
-        except Exception:
-            return False
+        pass
+
+    # 2. Try passlib verification with truncated string
+    try:
+        safe_str = pwd_bytes.decode("utf-8", errors="ignore")
+        if pwd_context.verify(safe_str, hashed_password):
+            return True
+    except Exception:
+        pass
+
+    # 3. Fallback passlib verification with raw string
+    try:
+        if pwd_context.verify(plain_password, hashed_password):
+            return True
+    except Exception:
+        pass
+
+    return False
 
 
 def get_password_hash(password: str) -> str:
-    safe_password = _truncate_password(password)
-    return pwd_context.hash(safe_password)
+    pwd_bytes = _get_pwd_bytes(password)
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
