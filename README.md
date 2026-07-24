@@ -4,6 +4,14 @@ An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **Reac
 
 ---
 
+## 🌐 Live Deployment
+
+- 🚀 **Live Web Application**: [https://ai-chatbot-platform-sigma.vercel.app/](https://ai-chatbot-platform-sigma.vercel.app/)
+- ⚡ **Live Backend API**: [https://ai-chatbot-platform-z04j.onrender.com](https://ai-chatbot-platform-z04j.onrender.com)
+- 📦 **GitHub Repository**: [https://github.com/Jas0108/AI-Chatbot-Platform](https://github.com/Jas0108/AI-Chatbot-Platform)
+
+---
+
 ## Key Features
 
 - **User Authentication & Security**:
