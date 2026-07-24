@@ -67,7 +67,7 @@ def clean_agent_response(text: str) -> str:
 def generate_chat_response(db: Session, project_id: int, user_message: str, user_id: int) -> str:
     openrouter_key = (os.getenv("OPENROUTER_API_KEY") or "").strip('"\' ')
     openai_key = (os.getenv("OPENAI_API_KEY") or "").strip('"\' ')
-    llm_model = os.getenv("LLM_MODEL", "openrouter/auto").strip('"\' ')
+    llm_model = os.getenv("LLM_MODEL", "google/gemma-4-31b-it:free").strip('"\' ')
 
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
