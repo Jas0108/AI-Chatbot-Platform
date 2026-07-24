@@ -1,6 +1,6 @@
 # AI Chatbot Platform
 
-A production-ready, full-stack **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **React (Vite)**, **SQLite**, **LangChain**, and **OpenRouter LLMs**. Users can register, log in, create isolated AI projects driven by specialized agent personas, and chat with AI assistants.
+An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **React (Vite)**, **SQLite**, **LangChain**, and **OpenRouter LLMs**. Users can register, log in, create isolated AI projects driven by specialized agent personas, and chat with AI assistants.
 
 ---
 
@@ -25,10 +25,6 @@ A production-ready, full-stack **AI Chatbot & Agent Orchestration Workspace** bu
   - Create, view, and delete isolated AI projects.
   - Persistent chat history per project stored in SQLite.
   - Sliding conversation window (last 10 turns) sent to LLM for fast, contextual responses.
-
-- **Modern Clean UI**:
-  - Slate & Indigo dark theme with responsive cards, clean typography, and top header navigation.
-
 ---
 
 ## Tech Stack
@@ -208,22 +204,4 @@ Yellow IAI/
 
 ---
 
-## Deployment Guide
 
-### Deploying Backend on Render
-1. Create a **New Web Service** on Render and connect your repository.
-2. Set **Root Directory** to `backend`.
-3. Set **Build Command**: `pip install -r requirements.txt`
-4. Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Add Environment Variables:
-   - `OPENROUTER_API_KEY`: Your OpenRouter API Key
-   - `SECRET_KEY`: A strong random string
-   - `DATABASE_URL`: `sqlite:///./ai_chatbot.db` (or Render PostgreSQL URL)
-
-### Deploying Frontend on Vercel or Render
-1. Create a **New Static Site** on Vercel/Render and select the repository.
-2. Set **Root Directory** to `frontend`.
-3. Set **Build Command**: `npm run build`
-4. Set **Publish Directory**: `dist`
-5. Add Environment Variable:
-   - `VITE_API_URL`: Your deployed backend URL (e.g. `https://your-backend.onrender.com`)
