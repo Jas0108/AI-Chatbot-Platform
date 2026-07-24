@@ -3,7 +3,6 @@ import bcrypt
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,50 +11,20 @@ SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def _get_pwd_bytes(password: str) -> bytes:
-    """Safely truncate password to 72 bytes for bcrypt compatibility."""
-    if not password:
-        return b""
-    return password.encode("utf-8")[:72]
-
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     if not plain_password or not hashed_password:
         return False
-    
-    pwd_bytes = _get_pwd_bytes(plain_password)
-    
-    # 1. Try direct bcrypt verification
+    pwd_bytes = plain_password.encode("utf-8")[:72]
+    hash_bytes = hashed_password.encode("utf-8")
     try:
-        hash_bytes = hashed_password.encode("utf-8")
-        if bcrypt.checkpw(pwd_bytes, hash_bytes):
-            return True
+        return bcrypt.checkpw(pwd_bytes, hash_bytes)
     except Exception:
-        pass
-
-    # 2. Try passlib verification with truncated string
-    try:
-        safe_str = pwd_bytes.decode("utf-8", errors="ignore")
-        if pwd_context.verify(safe_str, hashed_password):
-            return True
-    except Exception:
-        pass
-
-    # 3. Fallback passlib verification with raw string
-    try:
-        if pwd_context.verify(plain_password, hashed_password):
-            return True
-    except Exception:
-        pass
-
-    return False
+        return False
 
 
 def get_password_hash(password: str) -> str:
-    pwd_bytes = _get_pwd_bytes(password)
+    pwd_bytes = password.encode("utf-8")[:72]
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
