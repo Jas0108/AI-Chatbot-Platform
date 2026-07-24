@@ -43,7 +43,7 @@ An **AI Chatbot & Agent Orchestration Workspace** built with **FastAPI**, **Reac
 - **SQLite** - Embedded database storage
 - **PyJWT & bcrypt** - Authentication & security
 - **LangChain & ChatOpenAI** - LLM prompt orchestration
-- **OpenRouter API** - LLM access (`qwen/qwen3-235b-a22b:free`)
+- **OpenRouter API** - LLM access (`openrouter/auto`)
 
 ### Frontend
 - **React 18** (Vite build tool)

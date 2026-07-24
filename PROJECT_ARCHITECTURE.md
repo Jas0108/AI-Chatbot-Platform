@@ -42,7 +42,7 @@ graph TD
 
 ### Tier 3: Data & LLM Orchestration Layer
 - **Persistence**: SQLAlchemy ORM manages relational persistence with SQLite.
-- **AI Engine**: LangChain constructs `SystemMessage`, historical `AIMessage`/`HumanMessage` context, and streams calls to OpenRouter (`qwen/qwen3-235b-a22b:free`).
+- **AI Engine**: LangChain constructs `SystemMessage`, historical `AIMessage`/`HumanMessage` context, and streams calls to OpenRouter (`openrouter/auto`).
 
 ---
 

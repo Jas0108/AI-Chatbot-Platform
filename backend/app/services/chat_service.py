@@ -67,7 +67,7 @@ def clean_agent_response(text: str) -> str:
 def generate_chat_response(db: Session, project_id: int, user_message: str, user_id: int) -> str:
     openrouter_key = (os.getenv("OPENROUTER_API_KEY") or "").strip('"\' ')
     openai_key = (os.getenv("OPENAI_API_KEY") or "").strip('"\' ')
-    llm_model = os.getenv("LLM_MODEL", "qwen/qwen3-235b-a22b:free").strip('"\' ')
+    llm_model = os.getenv("LLM_MODEL", "openrouter/auto").strip('"\' ')
 
     project = db.query(Project).filter(Project.id == project_id).first()
     if not project:
@@ -102,25 +102,40 @@ def generate_chat_response(db: Session, project_id: int, user_message: str, user
             messages.append(AIMessage(content=msg.content))
     messages.append(HumanMessage(content=user_message))
 
-    try:
-        if openrouter_key and openrouter_key != "your-openrouter-api-key-here":
-            llm = ChatOpenAI(
-                model=llm_model,
-                openai_api_key=openrouter_key,
-                openai_api_base="https://openrouter.ai/api/v1",
-                temperature=0.7,
-                default_headers={
-                    "HTTP-Referer": "http://localhost:5173",
-                    "X-Title": "AI Chatbot Platform"
-                }
-            )
-        else:
-            llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=openai_key, temperature=0.7)
+    candidate_models = [
+        llm_model,
+        "openrouter/auto",
+        "google/gemma-2-9b-it:free",
+        "meta-llama/llama-3.1-8b-instruct:free",
+        "mistralai/mistral-7b-instruct:free",
+    ]
+    # Remove duplicates preserving order
+    seen = set()
+    candidate_models = [m for m in candidate_models if not (m in seen or seen.add(m))]
 
-        response = llm.invoke(messages)
-        assistant_message = clean_agent_response(response.content)
+    last_error = None
+    for model_name in candidate_models:
+        try:
+            if openrouter_key and openrouter_key != "your-openrouter-api-key-here":
+                llm = ChatOpenAI(
+                    model=model_name,
+                    openai_api_key=openrouter_key,
+                    openai_api_base="https://openrouter.ai/api/v1",
+                    temperature=0.7,
+                    default_headers={
+                        "HTTP-Referer": "http://localhost:5173",
+                        "X-Title": "AI Chatbot Platform"
+                    }
+                )
+            else:
+                llm = ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=openai_key, temperature=0.7)
 
-        save_message(db, project_id, "assistant", assistant_message)
-        return assistant_message
-    except Exception as e:
-        raise ValueError(f"Failed to generate response: {str(e)}")
+            response = llm.invoke(messages)
+            assistant_message = clean_agent_response(response.content)
+
+            save_message(db, project_id, "assistant", assistant_message)
+            return assistant_message
+        except Exception as e:
+            last_error = e
+
+    raise ValueError(f"Failed to generate response: {str(last_error)}")
