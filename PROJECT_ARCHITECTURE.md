@@ -125,9 +125,3 @@ sequenceDiagram
 
 ---
 
-## 6. Panel Explanation Guide (Quick Talking Points)
-
-- **Architecture**: "We built a 3-tier system with a React SPA on the frontend, a FastAPI REST service in the middle, and SQLite + LangChain/OpenRouter on the backend."
-- **Authentication**: "Stateless JWT tokens are passed in HTTP headers, with passwords hashed via Bcrypt."
-- **AI Orchestration**: "LangChain handles context assembly, combining persona system prompts with recent conversation history before sending prompts to LLMs."
-- **Sanitization**: "A custom post-processor cleans up raw LLM markdown clutter before sending output back to the UI."
